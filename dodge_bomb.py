@@ -44,6 +44,7 @@ def gameover(screen: pg.Surface)   -> None:
     screen.blit(go_img, go_rct)  # 画面出力
     pg.display.update()  # 画面を更新する
     time.sleep(5)
+    return
 
 def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
     bb_imgs = []
