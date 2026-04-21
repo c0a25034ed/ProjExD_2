@@ -34,7 +34,7 @@ def gameover(screen: pg.Surface)   -> None:
     go_img.set_alpha(210)
     font = pg.font.Font(None, 60)  # フォント
     text = font.render("GAME OVER", True, (255, 255, 255))  # gameoverのテキスト
-    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2)) 
+    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))  #テキストを中央に配置
     img=pg.image.load("fig/8.png")  # こうかとんの画像を読み込む
     img_rect=img.get_rect(center=(WIDTH // 2+150, HEIGHT // 2))  # こうかとんの画像取得
     img_rect2=img.get_rect(center=(WIDTH // 2-150, HEIGHT // 2))  # こうかとんの画像取得 
@@ -108,14 +108,7 @@ def main():
         sum_mv = [0, 0]
         kk_imgs = get_kk_imgs()
         kk_img = kk_imgs[tuple(sum_mv)]
-        # if key_lst[pg.K_UP]:
-        #     sum_mv[1] -= 5
-        # if key_lst[pg.K_DOWN]:
-        #     sum_mv[1] += 5
-        # if key_lst[pg.K_LEFT]:
-        #     sum_mv[0] -= 5
-        # if key_lst[pg.K_RIGHT]:
-        #     sum_mv[0] += 5
+        
         for key, mv in DELTA.items():
             if key_lst[key]:
                 sum_mv[0] += mv[0]
