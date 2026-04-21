@@ -108,14 +108,7 @@ def main():
         sum_mv = [0, 0]
         kk_imgs = get_kk_imgs()
         kk_img = kk_imgs[tuple(sum_mv)]
-        # if key_lst[pg.K_UP]:
-        #     sum_mv[1] -= 5
-        # if key_lst[pg.K_DOWN]:
-        #     sum_mv[1] += 5
-        # if key_lst[pg.K_LEFT]:
-        #     sum_mv[0] -= 5
-        # if key_lst[pg.K_RIGHT]:
-        #     sum_mv[0] += 5
+        
         for key, mv in DELTA.items():
             if key_lst[key]:
                 sum_mv[0] += mv[0]
