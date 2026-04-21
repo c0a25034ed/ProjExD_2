@@ -1,6 +1,7 @@
 import os
 import sys
 import random
+import time
 import pygame as pg
 
 
@@ -27,6 +28,48 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
+def gameover(screen: pg.Surface)   -> None:
+    go_img = pg.Surface((WIDTH, HEIGHT))  # ゲームオーバー用の空のSurfaceを作る
+    go_rct = go_img.get_rect()  # ゲームオーバー用のRectを取得する
+    go_img.set_alpha(210)
+    font = pg.font.Font(None, 60)  # フォント
+    text = font.render("GAME OVER", True, (255, 255, 255))  # gameoverのテキスト
+    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2)) 
+    img=pg.image.load("fig/8.png")  # こうかとんの画像を読み込む
+    img_rect=img.get_rect(center=(WIDTH // 2+150, HEIGHT // 2))  # こうかとんの画像取得
+    img_rect2=img.get_rect(center=(WIDTH // 2-150, HEIGHT // 2))  # こうかとんの画像取得 
+    go_img.blit(img, img_rect)  # こうかとんの画像右
+    go_img.blit(img, img_rect2)  # こうかとんの画像左
+    go_img.blit(text, text_rect)  # テキスト貼り付け
+    screen.blit(go_img, go_rct)  # 画面出力
+    pg.display.update()  # 画面を更新する
+    time.sleep(5)
+
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    bb_imgs = []
+    bb_accs = []
+    for r in list(range(1,11)):
+        bb_img = pg.Surface((20, 20))  # 爆弾用の空のSurfaceを作る
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)  
+        bb_imgs.append(bb_img)
+        bb_accs =[a for a in range(1,11)]
+        return bb_imgs, bb_accs  
+
+def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
+    kk_dict = {
+        (0, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 1),
+        (0, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 270, 1),
+        (0, +5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 1),
+        (-5, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 1),
+        (+5, 0):pg.transform.rotozoom(pg.image.load("fig/3.png"), 180, 1),
+        (-5, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 315, 1),
+        (+5, -5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 225, 1),
+        (-5, +5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 1),
+        (+5, +5):pg.transform.rotozoom(pg.image.load("fig/3.png"), 135, 1)
+        
+        }  
+    return kk_dict
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -46,17 +89,24 @@ def main():
 
     clock = pg.time.Clock()
     tmr = 0
+    init_bb_imgs()
+    get_kk_imgs()
+    
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
         if kk_rct.colliderect(bb_rct):  # こうかとんと爆弾の衝突判定
-            print("ゲームオーバー")
+            gameover(screen)  # ゲームオーバーの表示
+            print("ゲームオーバー")  
             return  # ゲームオーバーの意味でmain関数から出る
         screen.blit(bg_img, [0, 0]) 
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
+        kk_imgs = get_kk_imgs()
+        kk_img = kk_imgs[tuple(sum_mv)]
         # if key_lst[pg.K_UP]:
         #     sum_mv[1] -= 5
         # if key_lst[pg.K_DOWN]:
